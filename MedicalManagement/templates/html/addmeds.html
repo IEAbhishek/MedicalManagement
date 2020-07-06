@@ -1,0 +1,76 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- static css -->
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" >
+
+    <title>ADD MEDICINE</title>
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar nav_bg nav_text">
+        <nav class="nav">
+            <!-- Navs -->
+            {% for href,nav in navs %}
+            <a class="navbar-brand active nav_bg nav_text" href="{{ href }}"> {{ nav }} </a>
+            {% endfor %}
+        </nav>
+    </nav>
+
+    <!-- Heading Text -->
+    <div class="text-center">
+        <div class="alert alert-info" role="alert">
+            ADD MEDICINE
+        </div>
+    </div>
+
+    <!-- Alert messages -->
+    {% for message in messages %}
+    <div class="alert alert-{{message.tags}} alert-dismissible fade show" role="alert">
+      <strong></strong>{{message}}
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    {% endfor %}
+
+    <!-- Form -->
+    <div class="d-flex justify-content-center my-4">
+        <form method="post" action="handle_added_meds" enctype="multipart/form-data">{% csrf_token %}
+            <div class="form-group">
+                <label>Title</label>
+                <input type="text" class="form-control" id="title" name="title" required>
+            </div>
+            <div class="form-group">
+                <label>Image</label>
+                <input type="file" class="form-control-file"  id="image" name="image" required>
+            </div>
+            <div class="form-group">
+                <label>Price</label>
+                <input type="number" pattern="[0-9]*" class="form-control" id="price" name="price" required>
+            </div>
+            <div class="form-group">
+                <label>Description</label>
+                <input type="text" class="form-control" id="description" name="description" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" ></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+</body>
+
+</html>

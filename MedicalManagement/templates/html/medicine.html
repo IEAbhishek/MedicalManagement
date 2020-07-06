@@ -1,0 +1,84 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- static css -->
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+
+    <title>MEDICINE</title>
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar nav_bg nav_text">
+        <nav class="nav">
+            <!-- Navs -->
+            {% for href,nav in navs %}
+            <a class="navbar-brand active nav_bg nav_text" href="{{ href }}"> {{ nav }} </a>
+            {% endfor %}
+        </nav>
+    </nav>
+
+    <!-- Heading Text -->
+    <div class="text-center">
+        <div class="alert alert-info" role="alert">
+            BUY MEDICINE
+        </div>
+    </div>
+
+    <!-- search -->
+    <div class="d-flex justify-content-center mx-auto mb-4">
+        <form class="form-inline my-2 my-lg-0" action="handle_med_search" method="post">{% csrf_token %%}
+            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name='search_query' id="search_query">
+            <button class="btn btn-outline-secondary my-2 my-sm-0" type="submit">Search</button>
+        </form>
+    </div>
+
+    <!-- Alert messages -->
+    {% for message in messages %}
+    <div class="alert alert-{{message.tags}} alert-dismissible fade show" role="alert">
+        <strong></strong>{{message}}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    {% endfor %}
+
+    <!-- items -->
+    <div class="container ">
+        <div class="row">
+            {% for med in meds %}
+            <div class="col">
+                <!-- medicine -->
+                <div class="d-flex justify-content-center my-4">
+                    <div class="card mx-auto w-50 p-2 border border-dark">
+                        <img src="{% if med.image %}{{ med.image.url }}{% endif %}" class="card-img-top" alt=" Image Not Uploaded">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ med.title }}</h5>
+                            <p class="card-subtitle">${{ med.price }}</p>
+                            <p class="card-text"> {{ med.description }}</p>
+                            <a href="handle_medicine" class="btn btn-primary">Buy Now</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="w-100"></div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" ></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+</body>
+
+</html>

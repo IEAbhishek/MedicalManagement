@@ -1,0 +1,69 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- static css -->
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <title>Login Page</title>
+</head>
+
+<body class="text-center">
+
+    <!-- Navbar -->
+    <nav class="navbar nav_bg nav_text">
+        <nav class="nav">
+            <!-- Navs -->
+            {% for href,nav in navs %}
+            <a class="navbar-brand active nav_bg nav_text" href="{{ href }}"> {{ nav }} </a>
+            {% endfor %}
+        </nav>
+    </nav>
+
+    <!-- Heading Text -->
+    <div class="text-center">
+        <div class="alert alert-info" role="alert">
+            LOGIN
+        </div>
+    </div>
+
+    <!-- Alert messages -->
+    {% for message in messages %}
+    <div class="alert alert-{{message.tags}} alert-dismissible fade show" role="alert">
+        <strong></strong>{{message}}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    {% endfor %}
+
+    <!-- Form -->
+    <div class="card mx-auto w-75 p-3 mb-2 border border-primary">
+        <form class="form-signin" action="handle_login" method="POST"> {% csrf_token %}
+            <img class="mb-2" src="{% static 'images/tree.jpg' %}" class="autoimage" width="300px" height="300px">
+            <div class="form-group">
+                <input type="text" id="username" name="username" class="form-control" placeholder="User Name" required>
+            </div>
+            <div class="form-group">
+                <input type="password" id="password" name="password" class="form-control mt-2" placeholder="Password" required>
+            </div>
+            <button class="btn btn-sm btn-primary btn-block py-2" type="submit">Submit</button>
+            <p class="mt-3 mb-2">New User, Then <a href="registration">Register</a></p>
+        </form>
+    </div>
+
+
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,157 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- static css -->
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+
+    <title>DASHBOARD</title>
+</head>
+
+<body class="bg_dashb_image">
+
+    <!-- Navbar -->
+    <nav class="navbar nav_bg nav_text">
+        <nav class="nav">
+            <!-- Navs -->
+            {% for href,nav in navs %}
+            <a class="navbar-brand active nav_bg nav_text" href="{{ href }}"> {{ nav }} </a>
+            {% endfor %}
+        </nav>
+    </nav>
+
+    <!-- Heading Text -->
+    <div class="text-center">
+        <div class="alert alert-info" role="alert">
+            DASHBOARD
+        </div>
+    </div>
+
+    <!-- Alert messages -->
+    {% for message in messages %}
+    <div class="alert alert-{{message.tags}} alert-dismissible fade show" role="alert">
+        <strong></strong>{{message}}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    {% endfor %}
+
+    <!-- Content -->
+    <div class="d-flex justify-content-center mt-4">
+        <ul class="list-group mx-auto w-75 pxy-2">
+
+            <li class="list-group-item active text-center" style="text-transform:uppercase">{{ usr_type }}</li>
+            {% if usr.verified_staff is True  %}
+            <li class="list-group-item text-success">Verified</li>
+            {% endif %}
+            {% if usr.verified_seller is True  %}
+            <li class="list-group-item text-success">Verified</li>
+            {% endif %}
+            <li class="list-group-item">Username: {{ usr.username }}</li>
+            <li class="list-group-item">Name: {{ usr.name }}</li>
+            <li class="list-group-item">Email: {{ usr.email }}</li>
+            <li class="list-group-item">Phone: {{ usr.phone }}</li>
+            <li class="list-group-item">Address: {{ usr.address }}</li>
+            {% if usr.total_appointments >= 0 %}
+            <li class="list-group-item">Appoinments: {{ usr.total_appointments }} | Treated: {{usr.treated_appointments}}</li>
+            {% endif %}
+            {% if usr.total_no_medicines >= 0 %}
+            <li class="list-group-item">Total Medicines: {{ usr.total_no_medicines }}</li>
+            {% endif %}
+
+        </ul>
+    </div>
+
+    <!-- Staff content for posting news if staff is verified -->
+    {% if usr_type == 'staff' and usr.verified_staff is True %}
+    <div class="card mx-auto w-75 py-2 px-2 my-4 border border-primary">
+        <form class="form-signin" action="handle_news" method="POST"> {% csrf_token %}
+            <p> Add News </p>
+            <div class="form-group">
+                <input type="text" id="title" name="title" class="form-control" placeholder="Title" required>
+            </div>
+            <div class="form-group">
+                <textarea class="form-control" id="content" name="content" rows="3" placeholder="Content" required></textarea>
+            </div>
+            <button class="btn btn-sm btn-primary btn-block py-2" type="submit">Submit</button>
+        </form>
+    </div>
+    {% endif %}
+
+    <!-- Seller content for adding medicines if seller is verified -->
+    {% if usr_type == 'seller' and usr.verified_seller is True %}
+    <div class="card mx-auto w-75 py-2 px-2 my-4 border border-primary">
+        <form class="form-signin" action="addmeds" method="POST"> {% csrf_token %}
+            <button class="btn btn-sm btn-primary btn-block py-2" type="submit">Add Medicines</button>
+        </form>
+    </div>
+    {% endif %}
+
+    <!-- Doctor content to add specialization -->
+    {% if usr_type == 'doctor' and not usr.specialization %}
+    <div class="card mx-auto w-75 py-2 px-2 my-4 border border-primary">
+        <form class="form-signin" action="handle_specialization" method="POST"> {% csrf_token %}
+            <div class="form-group">
+                <input type="text" id="specialization" name="specialization" class="form-control" placeholder="Specialization" required>
+            </div>
+            <button class="btn btn-sm btn-primary btn-block py-2" type="submit">Add Specialization</button>
+        </form>
+    </div>
+    {% endif %}
+
+    <!-- Doctor content to show appointments and mark them as treated -->
+    {% if usr_type == 'doctor' and usr.total_appointments > 0 %}
+    <div class="card mx-auto w-75 py-3 my-2 border border-primary">
+        <p class="font-weight-normal px-3 nav_bg nav_text">Appoinments</p>
+        {% for appointment in appointments %}
+        <div class="card mx-auto w-75 my-2">
+            <div class="card-body border border-dark">
+                <h6 class="card-title">Patient: {{ appointment.patient }}</h6>
+                <h5 class="card-subtitle text-muted">Illness: {{ appointment.illness }}</h5>
+                <p class="card-text text-muted">Issue: {{ appointment.issue }}</p>
+                <form class="form-signin" action="handle_appointment_treated" method="post">{% csrf_token %}
+                    <input type="text" id="apn" name="apn" class="form-control" hidden value="{{appointment.apn}}">
+                    {% if not appointment.treated%}
+                    <button class="btn btn-sm btn-dark btn-block py-2" type="submit">Mark as treated</button>
+                    {% endif %}
+                </form>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Patient content for viewing appointments -->
+    {% if usr_type == 'patient' and usr.total_appointments > 0 %}
+    <div class="card mx-auto w-75 py-3 my-2 border border-primary">
+        <p class="font-weight-normal px-3 nav_bg nav_text">Appoinments</p>
+        {% for appointment in appointments %}
+        <div class="card mx-auto w-75 my-2">
+            <div class="card-body border border-dark">
+                <h6 class="card-title">Doctor: {{ appointment.doctor }}</h6>
+                <h5 class="card-subtitle text-muted">Illness: {{ appointment.illness }}</h5>
+                <p class="card-text text-muted">Issue: {{ appointment.issue }}</p>
+                <p class="card-text text-muted">Treated: {{ appointment.treated }}</p>
+
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+</body>
+
+</html>

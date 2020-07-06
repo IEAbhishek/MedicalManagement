@@ -1,0 +1,22 @@
+body {
+    margin: auto;
+    padding: auto;
+}
+
+
+.text-center{
+    background-image:url('../images/blue_bg.jpg')
+}
+
+.nav_bg{
+    background-color: #ED647F;
+}
+
+.nav_text{
+    background-color: #ED647F;
+    color: #E6D8DA;
+}
+
+.e_border{
+    border: 5px solid #ED647F;
+}
