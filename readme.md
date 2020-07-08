@@ -1,4 +1,4 @@
-### Description
+## escription
 This Medical Management Web Application is made using Django.<br>
 Project includes home, registration page, login, medicine, dashboard, appointment.
 ### Development
