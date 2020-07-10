@@ -6,9 +6,9 @@ This is a Medical Management System Where,
 + Patient can make an appointment with the available doctors
 + Users can Buy Medicine ( Currently Payments not accepted)
 
-* All the users will be able to make a registration and login
+* All the users will be able to make a registration and login.
 
-- For Staff and Seller they must be verified by the Admin
+- For Staff and Seller they must be verified by the Admin.
 
 -------Default Credentials-----------
  ____________________________________
